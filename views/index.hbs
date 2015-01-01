@@ -1,0 +1,207 @@
+<html>
+<head>
+    <title>Node Text</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+    <script src="http://code.highcharts.com/stock/highstock.js"></script>
+    <script src="http://code.highcharts.com/stock/modules/exporting.js"></script>
+    <script src="./../../css/bootstrap-3.2.0/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="./../../css/bootstrap-3.2.0/css/bootstrap.min.css">
+
+    <script>
+        function hide_me(id) {
+            $('#' + id).hide();
+        }
+        function show_me(id) {
+            $('#' + id).show();
+        }
+        function sd() {
+            $.getJSON('http://localhost:3000/sd', function (sd) {
+                $("#sd").val(sd);
+
+            });
+        }
+    </script>
+</head>
+<body>
+<div class="container">
+
+    <ul class="nav nav-tabs">
+        <li class="active"><a href="#" onclick="show_me('container'); show_me('container1');">Home</a></li>
+
+        <li><a href="#" onclick="hide_me('container'); show_me('container1');">Temprature</a></li>
+        <li><a href="#" onclick="hide_me('container1'); show_me('container');">Inclination</a></li>
+    </ul>
+</div>
+
+<div class="panel panel-primary col-md-9" id="container">
+
+
+    <div class="panel-body"></div>
+</div>
+<div class="panel panel-default col-md-3">
+
+    <div class="panel-body" id="container2">
+        <div id="lor">
+
+            <text><b>Sensor and Data information</b></text>
+            <br>
+            <!--Data information choosing-->
+
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Please choose your dataset properties
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown" href="#">Sensor Type</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">Strain-Guage</a></li>
+                            <li><a href="#">Displacement</a></li>
+                            <li><a href="#">Accelerometer</a></li>
+                            <li><a href="#">Temperature</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown">Channel</a>
+                        <ul class="dropdown-menu">
+                            <li><a href="#">ch-1</a></li>
+                            <li><a href="#">ch-2</a></li>
+                            <li><a href="#">ch-3</a></li>
+                            <li><a href="#">ch-4</a></li>
+                        </ul>
+                    </li>
+                    <form class="form" action="demo_form_action.asp" method="set">
+                        <b>Please chose data time slot:</b>
+                        <input type="date" id="From"/>
+                        <br>
+                        <input type="date" id="To"/>
+                    </form>
+
+
+               
+
+
+                    <p class="min">
+                        <label for="min">Minumum value:</label>
+                        <input type="text" name="min" id="min" size=7 />
+                    </p>
+
+                    <p class="max">
+                        <label for="max">Maximum value:</label>
+                        <input type="text" name="max" id="max" size=7 />
+                    </p>
+
+                    <p class="mean">
+                        <label for="mean">Mean (Average):</label>
+                        <input id="sd" name="mean" value="0" onclick="sd();" size=7 ></input>
+                    </p>
+
+                    <p class="std">
+                        <label for="std">Standard Deviation:</label>
+                        <input type="text" name="std" id="std" size=7 />
+                    </p>
+                </div>
+            </div>
+
+            <!--panel-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                               style="color:white">
+                                Smoothing Methods<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Moving Average</a></li>
+                                <li><a href="#">Linear Moving Average</a></li>
+                                <li><a href="#">iTrend</a></li>
+                            </ul>
+
+                        </li>
+                    </h3>
+                </div>
+                <div class="panel-body">
+				<b>Moving average </b> Average calculated over a specific number of periods (1 full completion of a full cycle of a potential sine or cosine function displayed in the data) of the dataset. Number depends on what development of the data one is interested in: short-term, interim, long-term --> input = number of periods
+
+ 
+
+		<b>Linear weighted moving average </b> Weighs the significance of the periods according to s specific pattern, putting most of the weight on recent data and less  and less weight on older data (means we don't control the weighting ourselves, it's determined by the function) --> input = again number of periods
+
+ 
+
+		<b>John Ehler's iTrend (or Ehler's instantaneous trend) </b> Moving average calculations can produce a lag (shift along time axis) if the data isn't mean-centered, which can eb as large (or long) as half the data set (sample width) behind the last datum point (data point of the set defined by the periods) --> input = alpha, which is a weighting factor that allows for removal of that lag, value is always between 0 and 1
+                   <br>
+				   <input type="text" name="period" id="pd" placeholder="Enter Period value"/>
+                     <span a><button type="button">Go!</button></span>
+                </div>
+            </div>
+<!--panel-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                               style="color:white">
+                                Noise Removal Methods<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Noise Removal</a></li>
+                                <li><a href="#">Noise Seperation</a></li>
+                            </ul>
+
+
+                        </li>
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+             
+					 Usually, in frequency domain "periods" representing the noise are removed by defining the length of the cycles that fit to the noise pattern, then the data is transformed back into time domain and the smoothing becomes visible.
+                    <br></br>
+                    <input type="text" name="period" id="pd" placeholder="Enter Period value"/>
+                    <span a><button type="button">Go!</button></span>
+                </div>
+            </div>
+<!--panel-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+
+                        <li class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" href="#" aria-expanded="false"
+                               style="color:white">
+                                Forecasting Methods<span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">Max Entropy</a></li>
+                                <li><a href="#"> Least Square</a></li>
+                            </ul>
+                        </li>
+                        </ul>
+
+                        </li>
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    Process of predicting a future event.
+                </div>
+            </div>
+<!--panel end-->
+        </div>
+    </div>
+</div>
+<div class="panel panel-primary col-md-9" id="container1">
+    <div class="panel-body"></div>
+</div>
+
+
+<script src="inc.js"></script>
+<script src="temp.js"></script>
+
+
+</body>
+</html>
